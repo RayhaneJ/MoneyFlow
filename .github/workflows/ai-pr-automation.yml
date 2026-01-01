@@ -110,13 +110,15 @@ jobs:
           PR_TITLE=$(python3 -c "import json; print(json.load(open('ai_output.json'))['pr_title'])")
           PR_DESC=$(python3 -c "import json; print(json.load(open('ai_output.json'))['pr_description'])")
           
-          # Create PR with heredoc to handle multi-line body
-          gh pr create \
-            --title "🤖 $PR_TITLE" \
-            --body "$(cat <<EOF
+          # Create PR body file
+          cat > pr_body.md << 'END_OF_BODY'
 ## AI Generated Changes
 
-$PR_DESC
+END_OF_BODY
+          
+          echo "$PR_DESC" >> pr_body.md
+          
+          cat >> pr_body.md << END_OF_BODY
 
 ---
 
@@ -133,8 +135,12 @@ $PR_DESC
 - [ ] Ready to merge
 
 🤖 This PR was automatically generated. Please review carefully!
-EOF
-)" \
+END_OF_BODY
+          
+          # Create PR using body-file
+          gh pr create \
+            --title "🤖 $PR_TITLE" \
+            --body-file pr_body.md \
             --base main \
             --head ${{ steps.commit.outputs.branch }} \
             --label "ai-generated"
