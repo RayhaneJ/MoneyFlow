@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MoneyFlow</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="wallets">Wallets</string>
+    <string name="reports">Reports</string>
+    <string name="create_wallet">Create Wallet</string>
+    <string name="add_expense">Add Expense</string>
+    <string name="wallet_name">Wallet Name</string>
+    <string name="spending_limit">Spending Limit</string>
+    <string name="remaining">Remaining</string>
+    <string name="balance">Balance</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="archive">Archive</string>
+    <string name="edit">Edit</string>
+    <string name="amount">Amount</string>
+    <string name="title">Title</string>
+    <string name="memo">Memo</string>
+    <string name="date">Date</string>
+    <string name="select_wallet">Select Wallet</string>
+    <string name="monthly_inflow">Monthly Inflow</string>
+    <string name="monthly_outflow">Monthly Outflow</string>
+    <string name="net_flow">Net Flow</string>
+    <string name="no_wallets">No wallets yet. Create one to start tracking!</string>
+    <string name="no_expenses">No expenses yet.</string>
+    <string name="icon">Icon</string>
+    <string name="wallet_type">Wallet Type</string>
+    <string name="expense_wallet">Expense Wallet</string>
+    <string name="savings_wallet">Savings Wallet</string>
+    <string name="income_wallet">Income Wallet</string>
+    <string name="inflow">Inflow</string>
+    <string name="outflow">Outflow</string>
+    <string name="flow_type">Flow Type</string>
+    <string name="search">Search</string>
+    <string name="total_expense_wallets">Total Expense Wallets</string>
+    <string name="total_savings">Total Savings</string>
+    <string name="total_income">Total Income</string>
+</resources>

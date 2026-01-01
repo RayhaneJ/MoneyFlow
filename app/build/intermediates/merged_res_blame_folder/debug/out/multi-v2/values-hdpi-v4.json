@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.moneyflow.tracker.app-mergeDebugResources-52:/values-hdpi-v4/values-hdpi-v4.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\Rayhane\\.gradle\\caches\\transforms-3\\5315f8034b9c23f0dd44bcc3fa6b05ff\\transformed\\appcompat-1.6.1\\res\\values-hdpi-v4\\values-hdpi-v4.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "6",
+                        "endColumns": "13",
+                        "endOffsets": "327"
+                    }
+                }
+            ]
+        }
+    ]
+}

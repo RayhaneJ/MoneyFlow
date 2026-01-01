@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="amber_500">#FFFFC107</color>
+    <color name="background_light">#FFF5F5F5</color>
+    <color name="black">#FF000000</color>
+    <color name="card_background">#FFFFFFFF</color>
+    <color name="cyan_200">#FF80DEEA</color>
+    <color name="cyan_500">#FF00BCD4</color>
+    <color name="cyan_700">#FF0097A7</color>
+    <color name="deep_orange_500">#FFFF5722</color>
+    <color name="error_red">#FFF44336</color>
+    <color name="grey_dark">#FF424242</color>
+    <color name="grey_light">#FFE0E0E0</color>
+    <color name="grey_medium">#FF9E9E9E</color>
+    <color name="ic_launcher_background">#FF00BCD4</color>
+    <color name="info_blue">#FF2196F3</color>
+    <color name="success_green">#FF4CAF50</color>
+    <color name="teal_200">#FF80CBC4</color>
+    <color name="teal_500">#FF009688</color>
+    <color name="teal_700">#FF00796B</color>
+    <color name="wallet_expense">#FFFF5722</color>
+    <color name="wallet_income">#FF2196F3</color>
+    <color name="wallet_savings">#FF4CAF50</color>
+    <color name="warning_orange">#FFFF9800</color>
+    <color name="white">#FFFFFFFF</color>
+    <string name="add_expense">Add Expense</string>
+    <string name="amount">Amount</string>
+    <string name="app_name">MoneyFlow</string>
+    <string name="archive">Archive</string>
+    <string name="balance">Balance</string>
+    <string name="cancel">Cancel</string>
+    <string name="create_wallet">Create Wallet</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="date">Date</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="expense_wallet">Expense Wallet</string>
+    <string name="flow_type">Flow Type</string>
+    <string name="icon">Icon</string>
+    <string name="income_wallet">Income Wallet</string>
+    <string name="inflow">Inflow</string>
+    <string name="memo">Memo</string>
+    <string name="monthly_inflow">Monthly Inflow</string>
+    <string name="monthly_outflow">Monthly Outflow</string>
+    <string name="net_flow">Net Flow</string>
+    <string name="no_expenses">No expenses yet.</string>
+    <string name="no_wallets">No wallets yet. Create one to start tracking!</string>
+    <string name="outflow">Outflow</string>
+    <string name="remaining">Remaining</string>
+    <string name="reports">Reports</string>
+    <string name="save">Save</string>
+    <string name="savings_wallet">Savings Wallet</string>
+    <string name="search">Search</string>
+    <string name="select_wallet">Select Wallet</string>
+    <string name="spending_limit">Spending Limit</string>
+    <string name="title">Title</string>
+    <string name="total_expense_wallets">Total Expense Wallets</string>
+    <string name="total_income">Total Income</string>
+    <string name="total_savings">Total Savings</string>
+    <string name="wallet_name">Wallet Name</string>
+    <string name="wallet_type">Wallet Type</string>
+    <string name="wallets">Wallets</string>
+    <style name="MoneyFlow.Button" parent="Widget.MaterialComponents.Button">
+        <item name="cornerRadius">8dp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+    <style name="MoneyFlow.Card" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">4dp</item>
+        <item name="contentPadding">16dp</item>
+    </style>
+    <style name="Theme.MoneyFlow" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        
+        <item name="colorPrimary">@color/cyan_500</item>
+        <item name="colorPrimaryVariant">@color/cyan_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        
+        
+        <item name="colorSecondary">@color/teal_500</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/white</item>
+        
+        
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        
+        
+        <item name="android:windowBackground">@color/background_light</item>
+    </style>
+</resources>

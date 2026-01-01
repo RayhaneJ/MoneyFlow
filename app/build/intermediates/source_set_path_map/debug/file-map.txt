@@ -1,0 +1,57 @@
+com.moneyflow.tracker.app-sqlite-framework-2.3.1-0 C:\Users\Rayhane\.gradle\caches\transforms-3\04a780ed4dff79ec145deca4c6cfd004\transformed\sqlite-framework-2.3.1\res
+com.moneyflow.tracker.app-slidingpanelayout-1.2.0-1 C:\Users\Rayhane\.gradle\caches\transforms-3\07593e7119808689cc8b4430884fbdfc\transformed\slidingpanelayout-1.2.0\res
+com.moneyflow.tracker.app-lifecycle-runtime-ktx-2.6.2-2 C:\Users\Rayhane\.gradle\caches\transforms-3\08079baf0336d2af4b3b12e64346af35\transformed\lifecycle-runtime-ktx-2.6.2\res
+com.moneyflow.tracker.app-coordinatorlayout-1.1.0-3 C:\Users\Rayhane\.gradle\caches\transforms-3\083664836f43bd62625ec4d56399d8c2\transformed\coordinatorlayout-1.1.0\res
+com.moneyflow.tracker.app-profileinstaller-1.3.0-4 C:\Users\Rayhane\.gradle\caches\transforms-3\130ab8f039cd571cb28aa6207c075fdc\transformed\profileinstaller-1.3.0\res
+com.moneyflow.tracker.app-emoji2-views-helper-1.2.0-5 C:\Users\Rayhane\.gradle\caches\transforms-3\1663930f9108ad4044c429d354e84fbc\transformed\emoji2-views-helper-1.2.0\res
+com.moneyflow.tracker.app-savedstate-1.2.1-6 C:\Users\Rayhane\.gradle\caches\transforms-3\17a95f09f3e5db2a6f7d54b2ef67bec1\transformed\savedstate-1.2.1\res
+com.moneyflow.tracker.app-lifecycle-viewmodel-savedstate-2.6.2-7 C:\Users\Rayhane\.gradle\caches\transforms-3\23b7291c364fcf8bfd77792bc774bb77\transformed\lifecycle-viewmodel-savedstate-2.6.2\res
+com.moneyflow.tracker.app-cardview-1.0.0-8 C:\Users\Rayhane\.gradle\caches\transforms-3\24579d9e9a986c277ed3128c0347178b\transformed\cardview-1.0.0\res
+com.moneyflow.tracker.app-lifecycle-runtime-2.6.2-9 C:\Users\Rayhane\.gradle\caches\transforms-3\2a61885b0c8949ae84af2aca1ee4c13b\transformed\lifecycle-runtime-2.6.2\res
+com.moneyflow.tracker.app-transition-1.4.1-10 C:\Users\Rayhane\.gradle\caches\transforms-3\3685376bb6050965fec6c34fc327d684\transformed\transition-1.4.1\res
+com.moneyflow.tracker.app-drawerlayout-1.1.1-11 C:\Users\Rayhane\.gradle\caches\transforms-3\3bebf99c46cb1c907939cd51f65c57ed\transformed\drawerlayout-1.1.1\res
+com.moneyflow.tracker.app-sqlite-2.3.1-12 C:\Users\Rayhane\.gradle\caches\transforms-3\3dcaeae36ec2c4a1c0bfab827bc7bd3b\transformed\sqlite-2.3.1\res
+com.moneyflow.tracker.app-navigation-fragment-ktx-2.6.0-13 C:\Users\Rayhane\.gradle\caches\transforms-3\42100ee37b8c81ddef36d84eee9eb080\transformed\navigation-fragment-ktx-2.6.0\res
+com.moneyflow.tracker.app-lifecycle-process-2.6.2-14 C:\Users\Rayhane\.gradle\caches\transforms-3\4f213f9653a4ac5dfe05b03d6da6c7bb\transformed\lifecycle-process-2.6.2\res
+com.moneyflow.tracker.app-appcompat-1.6.1-15 C:\Users\Rayhane\.gradle\caches\transforms-3\5315f8034b9c23f0dd44bcc3fa6b05ff\transformed\appcompat-1.6.1\res
+com.moneyflow.tracker.app-emoji2-1.2.0-16 C:\Users\Rayhane\.gradle\caches\transforms-3\5330c77263eb14dea00de3eee608e212\transformed\emoji2-1.2.0\res
+com.moneyflow.tracker.app-lifecycle-viewmodel-2.6.2-17 C:\Users\Rayhane\.gradle\caches\transforms-3\5370e488dd3f84e605f2c0c8623095e4\transformed\lifecycle-viewmodel-2.6.2\res
+com.moneyflow.tracker.app-window-1.0.0-18 C:\Users\Rayhane\.gradle\caches\transforms-3\5a4fc3fe53c9dca5de2ffa8b76974f37\transformed\window-1.0.0\res
+com.moneyflow.tracker.app-viewpager2-1.1.0-beta02-19 C:\Users\Rayhane\.gradle\caches\transforms-3\5bb5bbde4df9011d016c2bfd28e9dc12\transformed\viewpager2-1.1.0-beta02\res
+com.moneyflow.tracker.app-core-runtime-2.2.0-20 C:\Users\Rayhane\.gradle\caches\transforms-3\5ec7aa48fbd4df4399b2c093c78c4f1d\transformed\core-runtime-2.2.0\res
+com.moneyflow.tracker.app-lifecycle-livedata-ktx-2.6.2-21 C:\Users\Rayhane\.gradle\caches\transforms-3\6157de35f5485a98aac8293b199d3bc8\transformed\lifecycle-livedata-ktx-2.6.2\res
+com.moneyflow.tracker.app-savedstate-ktx-1.2.1-22 C:\Users\Rayhane\.gradle\caches\transforms-3\61b4c0892cc53108b998760e5486e2c0\transformed\savedstate-ktx-1.2.1\res
+com.moneyflow.tracker.app-core-ktx-1.10.1-23 C:\Users\Rayhane\.gradle\caches\transforms-3\628afd32b08849c910242b267a60a5dc\transformed\core-ktx-1.10.1\res
+com.moneyflow.tracker.app-customview-poolingcontainer-1.0.0-24 C:\Users\Rayhane\.gradle\caches\transforms-3\66df164f5fd7b896d68530af1d4c9314\transformed\customview-poolingcontainer-1.0.0\res
+com.moneyflow.tracker.app-navigation-fragment-2.6.0-25 C:\Users\Rayhane\.gradle\caches\transforms-3\704c850841990ffdf0b956881c2e2f27\transformed\navigation-fragment-2.6.0\res
+com.moneyflow.tracker.app-navigation-ui-ktx-2.6.0-26 C:\Users\Rayhane\.gradle\caches\transforms-3\7afa30d5556c56a4eb7c1d589c8383b8\transformed\navigation-ui-ktx-2.6.0\res
+com.moneyflow.tracker.app-fragment-ktx-1.6.0-27 C:\Users\Rayhane\.gradle\caches\transforms-3\7be6f64131e72a3248ddcee0ff78b06a\transformed\fragment-ktx-1.6.0\res
+com.moneyflow.tracker.app-fragment-1.6.0-28 C:\Users\Rayhane\.gradle\caches\transforms-3\82c169204c2d67196f9db12b37f320be\transformed\fragment-1.6.0\res
+com.moneyflow.tracker.app-navigation-runtime-2.6.0-29 C:\Users\Rayhane\.gradle\caches\transforms-3\838f87ceef13c8b535d2af5b0405b530\transformed\navigation-runtime-2.6.0\res
+com.moneyflow.tracker.app-activity-1.6.1-30 C:\Users\Rayhane\.gradle\caches\transforms-3\8538bafb35a1f4d985e27de985a17f81\transformed\activity-1.6.1\res
+com.moneyflow.tracker.app-appcompat-resources-1.6.1-31 C:\Users\Rayhane\.gradle\caches\transforms-3\9c102394ba079df5fbbbc071cb98c50c\transformed\appcompat-resources-1.6.1\res
+com.moneyflow.tracker.app-navigation-runtime-ktx-2.6.0-32 C:\Users\Rayhane\.gradle\caches\transforms-3\a1e9bdeaa9e7fb1de041ba14c4f60d9a\transformed\navigation-runtime-ktx-2.6.0\res
+com.moneyflow.tracker.app-navigation-common-ktx-2.6.0-33 C:\Users\Rayhane\.gradle\caches\transforms-3\a5cddcf1388f481e820a7ca47822285f\transformed\navigation-common-ktx-2.6.0\res
+com.moneyflow.tracker.app-navigation-ui-2.6.0-34 C:\Users\Rayhane\.gradle\caches\transforms-3\a8320bfa9551e4c75daed05647367032\transformed\navigation-ui-2.6.0\res
+com.moneyflow.tracker.app-room-ktx-2.5.2-35 C:\Users\Rayhane\.gradle\caches\transforms-3\acd569ce160ea1d2643a65078296487d\transformed\room-ktx-2.5.2\res
+com.moneyflow.tracker.app-core-1.10.1-36 C:\Users\Rayhane\.gradle\caches\transforms-3\bdffaf5455a67fb639358f5d0d1f39b2\transformed\core-1.10.1\res
+com.moneyflow.tracker.app-room-runtime-2.5.2-37 C:\Users\Rayhane\.gradle\caches\transforms-3\bf9d26793735fe5accb6ca3d88f6b266\transformed\room-runtime-2.5.2\res
+com.moneyflow.tracker.app-lifecycle-livedata-2.6.2-38 C:\Users\Rayhane\.gradle\caches\transforms-3\c421d3388c02ed7eee8ab55aa9fb0bb6\transformed\lifecycle-livedata-2.6.2\res
+com.moneyflow.tracker.app-constraintlayout-2.1.4-39 C:\Users\Rayhane\.gradle\caches\transforms-3\caaa12f91734802d716f5d2eabb3052f\transformed\constraintlayout-2.1.4\res
+com.moneyflow.tracker.app-lifecycle-livedata-core-2.6.2-40 C:\Users\Rayhane\.gradle\caches\transforms-3\cc304c0d639cf06b48b6388d9483c9b7\transformed\lifecycle-livedata-core-2.6.2\res
+com.moneyflow.tracker.app-lifecycle-viewmodel-ktx-2.6.2-41 C:\Users\Rayhane\.gradle\caches\transforms-3\d061e8fc4a92e096974b55d083a2e293\transformed\lifecycle-viewmodel-ktx-2.6.2\res
+com.moneyflow.tracker.app-activity-ktx-1.6.1-42 C:\Users\Rayhane\.gradle\caches\transforms-3\d4b746067d226ee24a29b430d5596660\transformed\activity-ktx-1.6.1\res
+com.moneyflow.tracker.app-navigation-common-2.6.0-43 C:\Users\Rayhane\.gradle\caches\transforms-3\d766c92ab2483ecd72abfcc6b8e04ecd\transformed\navigation-common-2.6.0\res
+com.moneyflow.tracker.app-material-1.9.0-44 C:\Users\Rayhane\.gradle\caches\transforms-3\e1605efe9b6723d6f6880ae3fe2b8d4f\transformed\material-1.9.0\res
+com.moneyflow.tracker.app-lifecycle-livedata-core-ktx-2.6.2-45 C:\Users\Rayhane\.gradle\caches\transforms-3\efa6c0bddaed9a38a56af82224b53aed\transformed\lifecycle-livedata-core-ktx-2.6.2\res
+com.moneyflow.tracker.app-recyclerview-1.3.1-46 C:\Users\Rayhane\.gradle\caches\transforms-3\fa3a290e24001e38c259ddb3571a0b6b\transformed\recyclerview-1.3.1\res
+com.moneyflow.tracker.app-startup-runtime-1.1.1-47 C:\Users\Rayhane\.gradle\caches\transforms-3\fb4a1eeaff0e1b3a30930fdbd5aadefa\transformed\startup-runtime-1.1.1\res
+com.moneyflow.tracker.app-annotation-experimental-1.3.0-48 C:\Users\Rayhane\.gradle\caches\transforms-3\fc0ad7a9159ced4bcb319b8175f9bb31\transformed\annotation-experimental-1.3.0\res
+com.moneyflow.tracker.app-pngs-49 C:\Users\Rayhane\Downloads\MoneyFlow (11)\MoneyFlow\app\build\generated\res\pngs\debug
+com.moneyflow.tracker.app-resValues-50 C:\Users\Rayhane\Downloads\MoneyFlow (11)\MoneyFlow\app\build\generated\res\resValues\debug
+com.moneyflow.tracker.app-rs-51 C:\Users\Rayhane\Downloads\MoneyFlow (11)\MoneyFlow\app\build\generated\res\rs\debug
+com.moneyflow.tracker.app-packageDebugResources-52 C:\Users\Rayhane\Downloads\MoneyFlow (11)\MoneyFlow\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.moneyflow.tracker.app-packageDebugResources-53 C:\Users\Rayhane\Downloads\MoneyFlow (11)\MoneyFlow\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.moneyflow.tracker.app-merged_res-54 C:\Users\Rayhane\Downloads\MoneyFlow (11)\MoneyFlow\app\build\intermediates\merged_res\debug
+com.moneyflow.tracker.app-debug-55 C:\Users\Rayhane\Downloads\MoneyFlow (11)\MoneyFlow\app\src\debug\res
+com.moneyflow.tracker.app-main-56 C:\Users\Rayhane\Downloads\MoneyFlow (11)\MoneyFlow\app\src\main\res

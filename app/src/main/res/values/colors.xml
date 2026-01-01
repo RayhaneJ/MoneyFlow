@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Colors - Cyan/Turquoise theme -->
+    <color name="cyan_200">#FF80DEEA</color>
+    <color name="cyan_500">#FF00BCD4</color>
+    <color name="cyan_700">#FF0097A7</color>
+    
+    <!-- Secondary Colors - Teal -->
+    <color name="teal_200">#FF80CBC4</color>
+    <color name="teal_500">#FF009688</color>
+    <color name="teal_700">#FF00796B</color>
+    
+    <!-- Accent Colors -->
+    <color name="amber_500">#FFFFC107</color>
+    <color name="deep_orange_500">#FFFF5722</color>
+    
+    <!-- Base Colors -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    
+    <!-- Status Colors -->
+    <color name="success_green">#FF4CAF50</color>
+    <color name="warning_orange">#FFFF9800</color>
+    <color name="error_red">#FFF44336</color>
+    <color name="info_blue">#FF2196F3</color>
+    
+    <!-- Neutral Colors -->
+    <color name="grey_light">#FFE0E0E0</color>
+    <color name="grey_medium">#FF9E9E9E</color>
+    <color name="grey_dark">#FF424242</color>
+    
+    <!-- Background Colors -->
+    <color name="background_light">#FFF5F5F5</color>
+    <color name="card_background">#FFFFFFFF</color>
+    
+    <!-- Wallet Type Colors -->
+    <color name="wallet_expense">#FFFF5722</color>
+    <color name="wallet_savings">#FF4CAF50</color>
+    <color name="wallet_income">#FF2196F3</color>
+    
+    <!-- Launcher icon background -->
+    <color name="ic_launcher_background">#FF00BCD4</color>
+</resources>

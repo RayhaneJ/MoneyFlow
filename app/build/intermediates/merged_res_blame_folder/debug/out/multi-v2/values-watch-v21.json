@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.moneyflow.tracker.app-mergeDebugResources-52:/values-watch-v21/values-watch-v21.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\Rayhane\\.gradle\\caches\\transforms-3\\5315f8034b9c23f0dd44bcc3fa6b05ff\\transformed\\appcompat-1.6.1\\res\\values-watch-v21\\values-watch-v21.xml",
+                    "from": {
+                        "startLines": "2,6,10",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,271,499",
+                        "endLines": "5,9,13",
+                        "endColumns": "12,12,12",
+                        "endOffsets": "266,494,724"
+                    }
+                }
+            ]
+        }
+    ]
+}

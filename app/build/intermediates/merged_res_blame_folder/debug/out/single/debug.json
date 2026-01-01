@@ -1,0 +1,90 @@
+[
+    {
+        "merged": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-merged_res-54:\\mipmap-mdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-main-56:\\mipmap-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-merged_res-54:\\mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-main-56:\\mipmap-xxxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-merged_res-54:\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-main-56:\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-merged_res-54:\\drawable_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-main-56:\\drawable\\ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-merged_res-54:\\layout_item_wallet.xml.flat",
+        "source": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-main-56:\\layout\\item_wallet.xml"
+    },
+    {
+        "merged": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-merged_res-54:\\mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-main-56:\\mipmap-mdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-merged_res-54:\\layout_activity_wallet_details.xml.flat",
+        "source": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-main-56:\\layout\\activity_wallet_details.xml"
+    },
+    {
+        "merged": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-merged_res-54:\\layout_activity_dashboard.xml.flat",
+        "source": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-main-56:\\layout\\activity_dashboard.xml"
+    },
+    {
+        "merged": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-merged_res-54:\\mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-main-56:\\mipmap-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-merged_res-54:\\mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-main-56:\\mipmap-xxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-merged_res-54:\\mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-main-56:\\mipmap-xxxhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-merged_res-54:\\layout_item_expense.xml.flat",
+        "source": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-main-56:\\layout\\item_expense.xml"
+    },
+    {
+        "merged": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-merged_res-54:\\menu_menu_dashboard.xml.flat",
+        "source": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-main-56:\\menu\\menu_dashboard.xml"
+    },
+    {
+        "merged": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-merged_res-54:\\layout_activity_create_wallet.xml.flat",
+        "source": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-main-56:\\layout\\activity_create_wallet.xml"
+    },
+    {
+        "merged": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-merged_res-54:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-main-56:\\mipmap-anydpi-v26\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-merged_res-54:\\layout_activity_reports.xml.flat",
+        "source": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-main-56:\\layout\\activity_reports.xml"
+    },
+    {
+        "merged": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-merged_res-54:\\mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-main-56:\\mipmap-xhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "com.moneyflow.tracker.app-merged_res-54:/layout_activity_dashboard.xml.flat",
+        "source": "com.moneyflow.tracker.app-main-56:/layout/activity_dashboard.xml"
+    },
+    {
+        "merged": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-merged_res-54:\\mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-main-56:\\mipmap-hdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-merged_res-54:\\layout_activity_add_expense.xml.flat",
+        "source": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-main-56:\\layout\\activity_add_expense.xml"
+    },
+    {
+        "merged": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-merged_res-54:\\mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-main-56:\\mipmap-xxhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-merged_res-54:\\mipmap-hdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\Rayhane\\.gradle\\daemon\\7.6.4\\com.moneyflow.tracker.app-main-56:\\mipmap-hdpi\\ic_launcher.png"
+    }
+]
