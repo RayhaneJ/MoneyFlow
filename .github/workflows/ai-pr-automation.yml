@@ -1,7 +1,6 @@
-name: AI PR Automation
+name: AI PR Automation (Production)
 
 on:
-  # Déclenchement manuel depuis GitHub UI
   workflow_dispatch:
     inputs:
       task:
@@ -9,166 +8,136 @@ on:
         required: true
         type: string
         default: 'Add dark mode support to Dashboard'
-      
-  # Déclenchement sur issue avec label "ai-task"
-  issues:
-    types: [labeled]
-  
-  # Déclenchement sur commentaire /ai
-  issue_comment:
-    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
 
 jobs:
   ai-pr-generation:
     runs-on: ubuntu-latest
-    if: |
-      github.event_name == 'workflow_dispatch' || 
-      (github.event_name == 'issues' && github.event.label.name == 'ai-task') ||
-      (github.event_name == 'issue_comment' && startsWith(github.event.comment.body, '/ai '))
-    
-    permissions:
-      contents: write
-      pull-requests: write
-      issues: write
-    
+
     steps:
-      - name: Checkout repository
+      - name: Checkout full repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-      
-      - name: Set up Python
+          fetch-depth: 0  # clone complet pour éviter "No commits between master and branch"
+
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      
+
       - name: Install dependencies
         run: |
           pip install anthropic requests
-      
+
       - name: Get task description
         id: get-task
         run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            TASK="${{ inputs.task }}"
-          elif [ "${{ github.event_name }}" == "issues" ]; then
-            TASK="${{ github.event.issue.title }}"
-            echo "issue_number=${{ github.event.issue.number }}" >> $GITHUB_OUTPUT
-          elif [ "${{ github.event_name }}" == "issue_comment" ]; then
-            TASK="${{ github.event.comment.body }}"
-            TASK="${TASK#/ai }"  # Remove /ai prefix
-            echo "issue_number=${{ github.event.issue.number }}" >> $GITHUB_OUTPUT
-          fi
-          
+          TASK="${{ inputs.task }}"
           echo "task=$TASK" >> $GITHUB_OUTPUT
           echo "📝 Task: $TASK"
-      
+
       - name: Generate code with AI
         id: ai-gen
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           TASK: ${{ steps.get-task.outputs.task }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python3 .github/scripts/ai_pr_generator.py "$TASK"
-      
-      - name: Create branch and commit
-        id: commit
+
+      - name: Create unique branch
         run: |
-          # Create branch name from task
-          BRANCH_NAME="ai/$(echo '${{ steps.get-task.outputs.task }}' | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | sed 's/[^a-z0-9-]//g' | cut -c1-40)"
-          echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
-          
-          # Configure git
-          git config user.name "MoneyFlow AI Bot"
+          git fetch origin master
+          git checkout master
+          git pull origin master
+
+          RAND_ID=$(head /dev/urandom | tr -dc a-z0-9 | head -c4)
+          BRANCH="ai/$(date +%s)-${RAND_ID}-workflow-task"
+          echo "branch=$BRANCH" >> $GITHUB_ENV
+
+          git config user.name "AI Bot"
           git config user.email "ai-bot@moneyflow.app"
-          
-          # Create and checkout branch
-          git checkout -b "$BRANCH_NAME"
-          
-          # Add changes
-          git add .
-          
-          # Commit if there are changes
+
+          # Boucle sécurité si la branche existe déjà
+          while git ls-remote --heads origin "$BRANCH" | grep -q "$BRANCH"; do
+            RAND_ID=$(head /dev/urandom | tr -dc a-z0-9 | head -c4)
+            BRANCH="ai/$(date +%s)-${RAND_ID}-workflow-task"
+            echo "branch=$BRANCH" >> $GITHUB_ENV
+          done
+
+          git checkout -b "$BRANCH"
+          echo "✅ Branch created: $BRANCH"
+
+      - name: Commit AI changes
+        run: |
+          git add -A
           if git diff --staged --quiet; then
-            echo "No changes generated"
-            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "❌ No changes to commit"
+            echo "changes=false" >> $GITHUB_ENV
           else
             git commit -m "🤖 AI: ${{ steps.get-task.outputs.task }}"
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-          fi
-      
-      - name: Push branch
-        if: steps.commit.outputs.has_changes == 'true'
-        run: |
-          git push origin ${{ steps.commit.outputs.branch }}
-      
-      - name: Create Pull Request
-        if: steps.commit.outputs.has_changes == 'true'
+            echo "changes=true" >> $GITHUB_ENV
+            echo "✅ Changes committed"
+
+      - name: Ensure PR label exists
+        if: env.changes == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Read PR info from AI output
+          LABEL="ai-generated"
+          gh label list | grep -q "$LABEL" || gh label create "$LABEL" --description "AI generated PR" --color "00ff00"
+          echo "✅ Label ensured: $LABEL"
+
+      - name: Create PR body file
+        if: env.changes == 'true'
+        run: |
           PR_TITLE=$(python3 -c "import json; print(json.load(open('ai_output.json'))['pr_title'])")
           PR_DESC=$(python3 -c "import json; print(json.load(open('ai_output.json'))['pr_description'])")
-          
-          # Create PR body file with echo
+
           echo "## AI Generated Changes" > pr_body.md
           echo "" >> pr_body.md
           echo "$PR_DESC" >> pr_body.md
           echo "" >> pr_body.md
           echo "---" >> pr_body.md
           echo "" >> pr_body.md
-          echo "**Original Task:** ${{ steps.get-task.outputs.task }}" >> pr_body.md
-          echo "" >> pr_body.md
-          echo "**Generated by:** MoneyFlow AI Bot" >> pr_body.md
-          echo "**Triggered by:** @${{ github.actor }}" >> pr_body.md
-          echo "" >> pr_body.md
-          echo "### ⚠️ Review Checklist" >> pr_body.md
-          echo "- [ ] Code compiles successfully" >> pr_body.md
-          echo "- [ ] Follows existing patterns" >> pr_body.md
-          echo "- [ ] No security issues" >> pr_body.md
-          echo "- [ ] Tests added (if applicable)" >> pr_body.md
-          echo "- [ ] Ready to merge" >> pr_body.md
-          echo "" >> pr_body.md
-          echo "🤖 This PR was automatically generated. Please review carefully!" >> pr_body.md
-          
-          # Create PR using body-file
+          echo "**Task:** ${{ steps.get-task.outputs.task }}" >> pr_body.md
+          echo "**Generated by:** AI Bot" >> pr_body.md
+          echo "**Branch:** \`${{ env.branch }}\`" >> pr_body.md
+          echo "✅ PR body created"
+          cat pr_body.md
+
+      - name: Push branch and create PR
+        if: env.changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git push origin ${{ env.branch }}
+
+          PR_TITLE=$(python3 -c "import json; print(json.load(open('ai_output.json'))['pr_title'])")
+
           gh pr create \
             --title "🤖 $PR_TITLE" \
             --body-file pr_body.md \
-            --base main \
-            --head ${{ steps.commit.outputs.branch }} \
+            --base master \
+            --head ${{ env.branch }} \
             --label "ai-generated"
-          
-          echo "✅ PR created successfully"
-      
-      - name: Comment on issue
-        if: steps.get-task.outputs.issue_number && steps.commit.outputs.has_changes == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          echo "✅ AI PR created successfully"
+
+      - name: Cleanup temporary files
+        if: env.changes == 'true'
         run: |
-          echo "🤖 **AI PR Created!**" > comment.md
-          echo "" >> comment.md
-          echo "I've generated code for this task. Check it out in the Pull Requests tab!" >> comment.md
-          echo "" >> comment.md
-          echo "**Branch:** \`${{ steps.commit.outputs.branch }}\`" >> comment.md
-          echo "" >> comment.md
-          echo "Please review the changes before merging." >> comment.md
-          
-          gh issue comment ${{ steps.get-task.outputs.issue_number }} --body-file comment.md
-      
-      - name: Handle failure
-        if: failure()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          rm -f pr_body.md ai_output.json
+          echo "🧹 Temporary files cleaned up"
+
+      - name: Summary
         run: |
-          if [ -n "${{ steps.get-task.outputs.issue_number }}" ]; then
-            echo "❌ **AI PR Generation Failed**" > error_comment.md
-            echo "" >> error_comment.md
-            echo "Something went wrong while generating code. Please check the workflow logs for details." >> error_comment.md
-            echo "" >> error_comment.md
-            echo "[View workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> error_comment.md
-            
-            gh issue comment ${{ steps.get-task.outputs.issue_number }} --body-file error_comment.md
+          echo "🎉 AI workflow completed!"
+          if [ "${{ env.changes }}" == "true" ]; then
+            echo "✅ PR created: check Pull Requests tab"
+          else
+            echo "❌ No changes to commit, no PR created"
           fi
