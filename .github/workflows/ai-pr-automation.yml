@@ -79,8 +79,8 @@ jobs:
           else
             COMMIT_MSG_FILE=$(mktemp)
             cat > "$COMMIT_MSG_FILE" <<EOF
-🤖 AI: ${{ steps.get-task.outputs.task }}
-EOF
+          🤖 AI: ${{ steps.get-task.outputs.task }}
+          EOF
             git commit -F "$COMMIT_MSG_FILE"
             echo "changes=true" >> $GITHUB_ENV
             echo "✅ Changes committed"
