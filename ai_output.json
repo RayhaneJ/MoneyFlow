@@ -1,0 +1,11 @@
+{
+  "task": "il y a un bug dans le add expense activity, les boutons inflow et outflow contiennent les path des varibales string et pas le texte en lui meme, exemple :  @string/outflow au lieu de outflow",
+  "files_created": [],
+  "files_modified": [
+    "app/src/main/java/com/moneyflow/tracker/ui/activity/AddExpenseActivity.kt"
+  ],
+  "pr_title": "Fix: Flow type buttons showing string resource paths instead of text",
+  "pr_description": "## What This Fixes\n- Fixed inflow/outflow buttons displaying @string/inflow and @string/outflow instead of actual text\n- Buttons now show \"Inflow\" and \"Outflow\" properly\n\n## Changes Made\n- Added programmatic text setting for btnInflow and btnOutflow in setupFlowTypeButtons()\n- Set button text to \"Inflow\" and \"Outflow\" directly in code to avoid string resource dependency\n\n## Testing\n1. Open Add Expense Activity\n2. Verify that the flow type buttons show \"Inflow\" and \"Outflow\" text instead of string resource paths\n3. Test that button selection still works correctly\n4. Test that expense creation works with both flow types\n\n## Notes\n- This is a quick fix that sets text programmatically\n- For a more complete solution, the strings.xml file should be updated with proper string resources\n- The layout files are not included in the context, so this programmatic approach ensures the fix works",
+  "breaking_changes": false,
+  "requires_migration": false
+}
