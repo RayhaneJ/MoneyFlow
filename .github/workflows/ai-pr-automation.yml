@@ -146,14 +146,15 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh issue comment ${{ steps.get-task.outputs.issue_number }} \
-            --body "🤖 **AI PR Created!**
-
-I've generated code for this task. Check it out in the Pull Requests tab!
-
-**Branch:** \`${{ steps.commit.outputs.branch }}\`
-
-Please review the changes before merging."
+          echo "🤖 **AI PR Created!**" > comment.md
+          echo "" >> comment.md
+          echo "I've generated code for this task. Check it out in the Pull Requests tab!" >> comment.md
+          echo "" >> comment.md
+          echo "**Branch:** \`${{ steps.commit.outputs.branch }}\`" >> comment.md
+          echo "" >> comment.md
+          echo "Please review the changes before merging." >> comment.md
+          
+          gh issue comment ${{ steps.get-task.outputs.issue_number }} --body-file comment.md
       
       - name: Handle failure
         if: failure()
@@ -161,10 +162,11 @@ Please review the changes before merging."
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [ -n "${{ steps.get-task.outputs.issue_number }}" ]; then
-            gh issue comment ${{ steps.get-task.outputs.issue_number }} \
-              --body "❌ **AI PR Generation Failed**
-
-Something went wrong while generating code. Please check the workflow logs for details.
-
-[View workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+            echo "❌ **AI PR Generation Failed**" > error_comment.md
+            echo "" >> error_comment.md
+            echo "Something went wrong while generating code. Please check the workflow logs for details." >> error_comment.md
+            echo "" >> error_comment.md
+            echo "[View workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> error_comment.md
+            
+            gh issue comment ${{ steps.get-task.outputs.issue_number }} --body-file error_comment.md
           fi
