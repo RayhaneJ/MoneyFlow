@@ -50,6 +50,10 @@ class AddExpenseActivity : AppCompatActivity() {
     }
 
     private fun setupFlowTypeButtons() {
+        // Set button text programmatically to avoid string resource issues
+        binding.btnInflow.text = "Inflow"
+        binding.btnOutflow.text = "Outflow"
+        
         when (selectedFlowType) {
             FlowType.INFLOW -> binding.btnInflow.isChecked = true
             FlowType.OUTFLOW -> binding.btnOutflow.isChecked = true
