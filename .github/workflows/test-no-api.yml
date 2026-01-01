@@ -1,4 +1,4 @@
-name: Test AI Workflow
+name: Test AI Workflow (Production Ready)
 
 on:
   workflow_dispatch:
@@ -21,7 +21,7 @@ jobs:
       - name: Checkout full repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Important pour avoir tout l'historique et éviter "No commits between main and branch"
+          fetch-depth: 0  # Important pour éviter "No commits between main and branch"
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -31,7 +31,6 @@ jobs:
       - name: Test - Create mock AI response
         run: |
           echo "🧪 Creating MOCK AI response (no API call)"
-          
           cat > ai_output.json << 'EOF'
           {
             "task": "${{ inputs.task }}",
@@ -88,6 +87,7 @@ jobs:
       - name: Test - Commit changes
         run: |
           git add -A
+          
           if git diff --staged --quiet; then
             echo "❌ No changes to commit"
             echo "changes=false" >> $GITHUB_ENV
@@ -95,6 +95,7 @@ jobs:
             git commit -m "🧪 Test: ${{ inputs.task }}"
             echo "changes=true" >> $GITHUB_ENV
             echo "✅ Changes committed"
+          fi
 
       - name: Test - Ensure PR label exists
         if: env.changes == 'true'
@@ -109,7 +110,6 @@ jobs:
       - name: Test - Create PR body file
         if: env.changes == 'true'
         run: |
-          echo "🧪 Creating PR body file"
           PR_TITLE=$(python3 -c "import json; print(json.load(open('ai_output.json'))['pr_title'])")
           PR_DESC=$(python3 -c "import json; print(json.load(open('ai_output.json'))['pr_description'])")
 
@@ -131,7 +131,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "🧪 Pushing branch and creating PR"
           git push origin ${{ env.branch }}
 
           PR_TITLE=$(python3 -c "import json; print(json.load(open('ai_output.json'))['pr_title'])")
@@ -145,7 +144,7 @@ jobs:
 
           echo "✅ TEST PR created successfully"
 
-      - name: Cleanup temporary files (optional)
+      - name: Cleanup temporary files
         if: env.changes == 'true'
         run: |
           rm -f pr_body.md ai_output.json
