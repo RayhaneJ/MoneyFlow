@@ -26,88 +26,198 @@ def read_file_safe(filepath):
         return ""
 
 
-def get_project_context():
-    """Build comprehensive project context for AI"""
+def get_all_kotlin_files():
+    """Recursively find all Kotlin files in the project"""
+    import os
     
-    # Read actual project files for context
-    wallet_model = read_file_safe("app/src/main/java/com/moneyflow/tracker/data/model/Wallet.kt")
-    expense_model = read_file_safe("app/src/main/java/com/moneyflow/tracker/data/model/Expense.kt")
+    kotlin_files = {}
+    base_path = "app/src/main/java/com/moneyflow/tracker"
+    
+    if not os.path.exists(base_path):
+        print(f"⚠️  Path not found: {base_path}", file=sys.stderr)
+        return kotlin_files
+    
+    # Find all .kt files recursively
+    for root, dirs, files in os.walk(base_path):
+        for file in files:
+            if file.endswith('.kt'):
+                full_path = os.path.join(root, file)
+                relative_path = full_path.replace(base_path + '/', '')
+                content = read_file_safe(full_path)
+                if content:
+                    kotlin_files[relative_path] = content
+    
+    print(f"   ✅ Found {len(kotlin_files)} Kotlin files", file=sys.stderr)
+    return kotlin_files
+
+
+def get_gradle_files():
+    """Read gradle files for dependencies info"""
+    gradle_files = {}
+    
+    # App build.gradle (Kotlin or Groovy)
+    for ext in ['.kts', '']:
+        path = f'app/build.gradle{ext}'
+        content = read_file_safe(path)
+        if content:
+            gradle_files['app/build.gradle'] = content
+            break
+    
+    # Project build.gradle
+    for ext in ['.kts', '']:
+        path = f'build.gradle{ext}'
+        content = read_file_safe(path)
+        if content:
+            gradle_files['build.gradle'] = content
+            break
+    
+    print(f"   ✅ Found {len(gradle_files)} Gradle files", file=sys.stderr)
+    return gradle_files
+
+
+def get_manifest():
+    """Read AndroidManifest.xml"""
+    manifest_path = "app/src/main/AndroidManifest.xml"
+    content = read_file_safe(manifest_path)
+    if content:
+        print(f"   ✅ Found AndroidManifest.xml", file=sys.stderr)
+        return content
+    return ""
+
+
+def get_project_context():
+    """Build comprehensive project context with ALL files"""
+    
+    print("📁 Reading ENTIRE repository...", file=sys.stderr)
+    
+    # Get all Kotlin files
+    kotlin_files = get_all_kotlin_files()
+    
+    # Get Gradle files
+    gradle_files = get_gradle_files()
+    
+    # Get manifest
+    manifest = get_manifest()
+    
+    # Calculate total size
+    total_chars = sum(len(content) for content in kotlin_files.values())
+    total_chars += sum(len(content) for content in gradle_files.values())
+    total_chars += len(manifest)
+    
+    print(f"   📊 Total characters: {total_chars:,}", file=sys.stderr)
+    print(f"   📊 Estimated tokens: ~{total_chars // 4:,}", file=sys.stderr)
+    
+    # Build Kotlin files section - FULL CONTENT, no truncation
+    kotlin_section = ""
+    for filepath, content in sorted(kotlin_files.items()):
+        kotlin_section += f"\n## FILE: {filepath}\n```kotlin\n{content}\n```\n"
+    
+    # Build Gradle section - FULL CONTENT
+    gradle_section = ""
+    for filepath, content in gradle_files.items():
+        if content:
+            gradle_section += f"\n## FILE: {filepath}\n```gradle\n{content}\n```\n"
+    
+    # Manifest section
+    manifest_section = ""
+    if manifest:
+        manifest_section = f"\n## FILE: AndroidManifest.xml\n```xml\n{manifest}\n```\n"
+    
+    # File counts by category
+    models = [f for f in kotlin_files if '/model/' in f]
+    daos = [f for f in kotlin_files if '/dao/' in f]
+    activities = [f for f in kotlin_files if '/activity/' in f]
+    adapters = [f for f in kotlin_files if '/adapter/' in f]
+    viewmodels = [f for f in kotlin_files if '/viewmodel/' in f]
+    repositories = [f for f in kotlin_files if '/repository/' in f]
+    databases = [f for f in kotlin_files if '/database/' in f]
     
     context = f"""
-# MoneyFlow Android App
+# MoneyFlow Android App - COMPLETE PROJECT CONTEXT
 
-## Architecture
-- **Pattern**: MVVM (Model-View-ViewModel)
-- **Database**: Room (SQLite)
-- **Async**: Kotlin Coroutines + Flow
-- **DI**: ViewModels with ViewModelFactory
-- **UI**: Material Design 3, ViewBinding
+## PROJECT SUMMARY
+- Total Kotlin files: {len(kotlin_files)}
+- Models: {len(models)}
+- DAOs: {len(daos)}
+- Activities: {len(activities)}
+- Adapters: {len(adapters)}
+- ViewModels: {len(viewmodels)}
+- Repositories: {len(repositories)}
+- Databases: {len(databases)}
 
-## Project Structure
+## BUILD CONFIGURATION
+{gradle_section}
+
+## ANDROID MANIFEST
+{manifest_section}
+
+## ALL KOTLIN SOURCE FILES
+{kotlin_section}
+
+## CRITICAL INSTRUCTIONS
+
+### 1. YOU HAVE ACCESS TO ALL CODE ABOVE
+- Every class, method, property is shown in full above
+- Every import is visible
+- Every dependency is listed in gradle files
+- **DO NOT INVENT ANYTHING** - only use what you see above
+
+### 2. COMPLETE IMPORTS ARE MANDATORY
+Before using ANY class, verify:
+1. It exists in the code above, OR
+2. It's a standard Android SDK class
+
+Example of finding imports:
+- Need to use `Wallet`? → Search above for "class Wallet" → Found in data/model/Wallet.kt → Import: `import com.moneyflow.tracker.data.model.Wallet`
+- Need to use `WalletDao`? → Search above for "interface WalletDao" → Found in data/dao/WalletDao.kt → Import: `import com.moneyflow.tracker.data.dao.WalletDao`
+
+### 3. STANDARD ANDROID IMPORTS (Always Available)
+```kotlin
+// Core Android
+import android.os.Bundle
+import android.content.Intent
+import android.view.View
+import android.widget.*
+
+// AndroidX
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.*
+import androidx.recyclerview.widget.*
+
+// Material Design
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+
+// Kotlin Coroutines
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
 ```
-app/src/main/java/com/moneyflow/tracker/
-├── data/
-│   ├── model/
-│   │   ├── Wallet.kt
-│   │   ├── Expense.kt  
-│   │   ├── MonthlyOverview.kt
-│   │   └── FlowType.kt (enum: INFLOW, OUTFLOW)
-│   ├── dao/
-│   │   ├── WalletDao.kt
-│   │   ├── ExpenseDao.kt
-│   │   └── MonthlyOverviewDao.kt
-│   └── database/
-│       └── MoneyFlowDatabase.kt
-├── repository/
-│   └── MoneyFlowRepository.kt
-├── ui/
-│   ├── activity/
-│   │   ├── DashboardActivity.kt
-│   │   ├── CreateWalletActivity.kt
-│   │   ├── AddExpenseActivity.kt
-│   │   ├── WalletDetailsActivity.kt
-│   │   └── ReportsActivity.kt
-│   ├── adapter/
-│   │   ├── WalletAdapter.kt
-│   │   └── ExpenseAdapter.kt
-│   └── viewmodel/
-│       └── MoneyFlowViewModel.kt
-```
 
-## Tech Stack
-- **Language**: Kotlin 1.9.0
-- **Min SDK**: 24 (Android 7.0)
-- **Target SDK**: 33 (Android 13)
-- **Gradle**: 7.6.4
-- **AGP**: 7.4.2
+### 4. VERIFICATION CHECKLIST
+Before generating code, verify:
+- [ ] Every class I use is in the code above or standard Android
+- [ ] Every method I call exists on that class
+- [ ] Every property I access exists in that class
+- [ ] All imports are complete and correct
+- [ ] Package names match the file structure above
 
-## Dependencies
-- Room: 2.5.2
-- Lifecycle: 2.6.2
-- Material: 1.9.0
-- Coroutines: 1.7.3
-- RecyclerView: 1.3.1
+### 5. FOLLOW EXISTING PATTERNS EXACTLY
+- Look at existing Activities → Copy their structure
+- Look at existing DAOs → Copy query patterns
+- Look at existing ViewModels → Copy LiveData usage
+- Look at existing Adapters → Copy DiffUtil patterns
 
-## Coding Conventions
-- Use ViewBinding (no findViewById)
-- LiveData for UI updates
-- Suspend functions for DB operations
-- Repository pattern for data access
-- Descriptive variable names (no single letters)
-- Comments for complex logic
-
-## Design Patterns
-- **Theme**: Cyan (#00BCD4) primary color
-- **Cards**: MaterialCardView with elevation
-- **Lists**: RecyclerView with DiffUtil
-- **Icons**: Emoji for wallets
-- **Currency**: US format ($1,234.56)
-
-## Current Models
-{wallet_model[:500] if wallet_model else "Wallet model not found"}
-
-{expense_model[:500] if expense_model else "Expense model not found"}
+### 6. NO PLACEHOLDERS
+- No "// TODO"
+- No "// Implement this"
+- No pseudo-code
+- Complete, compilable code only
 """
+    
+    print("✅ Complete project context built", file=sys.stderr)
     return context
 
 
@@ -140,18 +250,35 @@ You are an expert Android developer working on MoneyFlow, a personal budget trac
 ## TASK
 {task_description}
 
-## INSTRUCTIONS
-Generate complete, production-ready Kotlin code to implement this task.
+## CRITICAL INSTRUCTIONS
 
-Follow these rules:
-1. **Architecture**: Use MVVM pattern strictly
-2. **Database**: If modifying data models, include Room migration
-3. **UI**: Use ViewBinding, Material Design 3
-4. **Async**: Use Coroutines with proper exception handling
-5. **Code Style**: Follow existing patterns exactly
-6. **Comments**: Add clear, helpful comments
-7. **Imports**: Include all necessary imports
-8. **Error Handling**: Use try-catch where appropriate
+### 1. Use ONLY Existing Code
+- **DO NOT** invent new classes, methods, or properties
+- **ONLY** use what exists in the context above
+- If you need something that doesn't exist, mention it in pr_description
+
+### 2. Include ALL Necessary Imports
+- Add EVERY import needed
+- Check the "Common Imports" section above
+- Include Material Design imports
+- Include Room imports if using database
+- Include Coroutines imports if using suspend functions
+
+### 3. Follow Existing Patterns EXACTLY
+- Look at the code in the context
+- Copy the same style, naming, and structure
+- Use the same dependencies (exact versions shown above)
+
+### 4. Error Prevention
+- **Before using any class**: Verify it exists in context or is standard Android
+- **Before using any method**: Verify it exists on that class
+- **Before using any property**: Verify it exists in the model
+
+### 5. Complete Code ONLY
+- No pseudo-code
+- No "// TODO" comments
+- No placeholders
+- Working, compilable code only
 
 ## RESPONSE FORMAT
 Respond with ONLY valid JSON (no markdown, no explanation outside JSON):
@@ -165,8 +292,8 @@ Respond with ONLY valid JSON (no markdown, no explanation outside JSON):
       "explanation": "Brief explanation of this file"
     }}
   ],
-  "pr_title": "Add [feature name]",
-  "pr_description": "## What This PR Does\\n- Bullet points\\n\\n## How to Test\\n1. Steps\\n\\n## Screenshots\\n(Optional)",
+  "pr_title": "Fix: [specific issue]",
+  "pr_description": "## What This Fixes\\n- Bullet points\\n\\n## Changes Made\\n- List changes\\n\\n## Testing\\n1. Steps to test\\n\\n## Notes\\n- Any limitations or missing features",
   "breaking_changes": false,
   "requires_migration": false
 }}
@@ -176,7 +303,8 @@ CRITICAL:
 - Use \\n for newlines in content
 - Escape quotes in strings: \\"
 - No markdown formatting in JSON values
-- Keep code properly formatted and indented
+- Include ALL imports at the top of each file
+- Use ONLY the dependencies listed in the context
 """
     
     print("🤖 Calling Claude AI...", file=sys.stderr)
