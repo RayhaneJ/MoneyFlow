@@ -1,12 +1,13 @@
-name: Test AI Workflow (Production Ready)
+name: AI PR Automation (Production Ready)
 
 on:
   workflow_dispatch:
     inputs:
       task:
-        description: 'Test task description'
+        description: 'What do you want the AI to implement?'
         required: true
-        default: 'Add a simple feature'
+        type: string
+        default: 'Add dark mode support to Dashboard'
 
 permissions:
   contents: write
@@ -14,119 +15,99 @@ permissions:
   issues: write
 
 jobs:
-  test-ai-production:
+  ai-pr-generation:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout full repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Important pour éviter "No commits between main and branch"
+          fetch-depth: 0  # clone complet pour avoir tout l’historique
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Test - Create mock AI response
+      - name: Install dependencies
         run: |
-          echo "🧪 Creating MOCK AI response (no API call)"
-          cat > ai_output.json << 'EOF'
-          {
-            "task": "${{ inputs.task }}",
-            "files_created": ["app/src/main/java/com/moneyflow/tracker/test/TestFile.kt"],
-            "files_modified": [],
-            "pr_title": "Test: ${{ inputs.task }}",
-            "pr_description": "This is a TEST PR generated without calling the AI API.\n\n- No tokens consumed\n- No API costs\n- Just testing the workflow",
-            "breaking_changes": false,
-            "requires_migration": false
-          }
-          EOF
-          echo "✅ Mock response created"
+          pip install anthropic requests
 
-      - name: Test - Create mock code file
+      - name: Get task description
+        id: get-task
         run: |
-          echo "🧪 Creating MOCK Kotlin file"
-          mkdir -p app/src/main/java/com/moneyflow/tracker/test
-          cat > app/src/main/java/com/moneyflow/tracker/test/TestFile.kt << 'EOF'
-          package com.moneyflow.tracker.test
+          TASK="${{ inputs.task }}"
+          echo "task=$TASK" >> $GITHUB_OUTPUT
+          echo "📝 Task: $TASK"
 
-          /**
-           * This is a TEST file created by the workflow
-           * No AI was called, no tokens consumed
-           */
-          class TestFile {
-              fun testFunction(): String {
-                  return "This is a test from workflow: ${{ inputs.task }}"
-              }
-          }
-          EOF
-          echo "✅ Mock file created"
-
-      - name: Test - Create unique branch
+      - name: Generate code with AI
+        id: ai-gen
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TASK: ${{ steps.get-task.outputs.task }}
         run: |
-          # Générer un nom unique avec timestamp + random
+          python3 .github/scripts/ai_pr_generator.py "$TASK"
+
+      - name: Create unique branch
+        run: |
+          git fetch origin master
+          git checkout master
+          git pull origin master
+
           RAND_ID=$(head /dev/urandom | tr -dc a-z0-9 | head -c4)
-          BRANCH="test/$(date +%s)-${RAND_ID}-workflow-test"
+          BRANCH="ai/$(date +%s)-${RAND_ID}-workflow-task"
           echo "branch=$BRANCH" >> $GITHUB_ENV
 
-          git config user.name "Test Bot"
-          git config user.email "test@moneyflow.app"
+          git config user.name "AI Bot"
+          git config user.email "ai-bot@moneyflow.app"
 
-          # Vérifier si la branche existe déjà sur le remote
+          # Boucle sécurité si la branche existe déjà
           while git ls-remote --heads origin "$BRANCH" | grep -q "$BRANCH"; do
-            echo "⚠ Branch $BRANCH already exists, generating a new one"
             RAND_ID=$(head /dev/urandom | tr -dc a-z0-9 | head -c4)
-            BRANCH="test/$(date +%s)-${RAND_ID}-workflow-test"
+            BRANCH="ai/$(date +%s)-${RAND_ID}-workflow-task"
             echo "branch=$BRANCH" >> $GITHUB_ENV
           done
 
           git checkout -b "$BRANCH"
           echo "✅ Branch created: $BRANCH"
 
-      - name: Test - Commit changes
+      - name: Commit AI changes
         run: |
           git add -A
-          
           if git diff --staged --quiet; then
             echo "❌ No changes to commit"
             echo "changes=false" >> $GITHUB_ENV
           else
-            git commit -m "🧪 Test: ${{ inputs.task }}"
+            git commit -m "🤖 AI: ${{ steps.get-task.outputs.task }}"
             echo "changes=true" >> $GITHUB_ENV
             echo "✅ Changes committed"
-          fi
 
-      - name: Test - Ensure PR label exists
+      - name: Ensure PR label exists
         if: env.changes == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          LABEL="test-workflow"
-          # Créer le label si inexistant
-          gh label list | grep -q "$LABEL" || gh label create "$LABEL" --description "Test PR generated by workflow" --color "00ff00"
+          LABEL="ai-generated"
+          gh label list | grep -q "$LABEL" || gh label create "$LABEL" --description "AI generated PR" --color "00ff00"
           echo "✅ Label ensured: $LABEL"
 
-      - name: Test - Create PR body file
+      - name: Create PR body file
         if: env.changes == 'true'
         run: |
           PR_TITLE=$(python3 -c "import json; print(json.load(open('ai_output.json'))['pr_title'])")
           PR_DESC=$(python3 -c "import json; print(json.load(open('ai_output.json'))['pr_description'])")
 
-          echo "## Test PR (No API Called)" > pr_body.md
+          echo "## AI Generated Changes" > pr_body.md
           echo "" >> pr_body.md
           echo "$PR_DESC" >> pr_body.md
           echo "" >> pr_body.md
           echo "---" >> pr_body.md
           echo "" >> pr_body.md
-          echo "**Task:** ${{ inputs.task }}" >> pr_body.md
-          echo "**This is a TEST:** No AI API was called" >> pr_body.md
-          echo "**No tokens consumed:** ✅" >> pr_body.md
+          echo "**Task:** ${{ steps.get-task.outputs.task }}" >> pr_body.md
+          echo "**Generated by:** AI Bot" >> pr_body.md
           echo "**Branch:** \`${{ env.branch }}\`" >> pr_body.md
           echo "✅ PR body created"
-          cat pr_body.md
 
-      - name: Test - Push branch and create PR
+      - name: Push branch and create PR
         if: env.changes == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -136,13 +117,13 @@ jobs:
           PR_TITLE=$(python3 -c "import json; print(json.load(open('ai_output.json'))['pr_title'])")
 
           gh pr create \
-            --title "🧪 TEST: $PR_TITLE" \
+            --title "🤖 $PR_TITLE" \
             --body-file pr_body.md \
-            --base main \
+            --base master \
             --head ${{ env.branch }} \
-            --label "test-workflow"
+            --label "ai-generated"
 
-          echo "✅ TEST PR created successfully"
+          echo "✅ PR created successfully"
 
       - name: Cleanup temporary files
         if: env.changes == 'true'
@@ -152,13 +133,9 @@ jobs:
 
       - name: Summary
         run: |
-          echo "🎉 Workflow test completed!"
-          echo ""
-          echo "✅ All steps executed successfully"
-          echo "✅ No API tokens consumed"
-          echo "✅ No costs incurred"
-          echo "✅ Workflow syntax is valid"
+          echo "🎉 AI workflow completed!"
           if [ "${{ env.changes }}" == "true" ]; then
-            echo "✅ Test PR created - check the Pull Requests tab"
-            echo "   You can merge or close it safely"
+            echo "✅ PR created: check the Pull Requests tab"
+          else
+            echo "❌ No changes to commit, no PR created"
           fi
