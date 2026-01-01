@@ -1,5 +1,4 @@
 name: AI PR Automation
-
 on:
   # Déclenchement manuel depuis GitHub UI
   workflow_dispatch:
