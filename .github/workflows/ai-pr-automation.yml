@@ -1,4 +1,5 @@
 name: AI PR Automation
+
 on:
   # Déclenchement manuel depuis GitHub UI
   workflow_dispatch:
@@ -109,10 +110,11 @@ jobs:
           PR_TITLE=$(python3 -c "import json; print(json.load(open('ai_output.json'))['pr_title'])")
           PR_DESC=$(python3 -c "import json; print(json.load(open('ai_output.json'))['pr_description'])")
           
-          # Create PR
-          PR_URL=$(gh pr create \
+          # Create PR with heredoc to handle multi-line body
+          gh pr create \
             --title "🤖 $PR_TITLE" \
-            --body "## AI Generated Changes
+            --body "$(cat <<EOF
+## AI Generated Changes
 
 $PR_DESC
 
@@ -130,13 +132,14 @@ $PR_DESC
 - [ ] Tests added (if applicable)
 - [ ] Ready to merge
 
-🤖 This PR was automatically generated. Please review carefully!" \
+🤖 This PR was automatically generated. Please review carefully!
+EOF
+)" \
             --base main \
             --head ${{ steps.commit.outputs.branch }} \
-            --label "ai-generated")
+            --label "ai-generated"
           
-          echo "pr_url=$PR_URL" >> $GITHUB_OUTPUT
-          echo "✅ PR created: $PR_URL"
+          echo "✅ PR created successfully"
       
       - name: Comment on issue
         if: steps.get-task.outputs.issue_number && steps.commit.outputs.has_changes == 'true'
