@@ -1,0 +1,222 @@
+name: AI PR Refinement
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  refine-pr:
+    # Only run on PR comments that start with /refine or /fix
+    if: |
+      github.event.issue.pull_request &&
+      (startsWith(github.event.comment.body, '/refine') || startsWith(github.event.comment.body, '/fix'))
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: React to comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            /repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions \
+            -f content='eyes'
+      
+      - name: Get PR details
+        id: pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER=${{ github.event.issue.number }}
+          PR_DATA=$(gh pr view $PR_NUMBER --json headRefName,baseRefName,title,body)
+          
+          BRANCH=$(echo "$PR_DATA" | jq -r '.headRefName')
+          BASE=$(echo "$PR_DATA" | jq -r '.baseRefName')
+          PR_TITLE=$(echo "$PR_DATA" | jq -r '.title')
+          
+          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+          echo "base=$BASE" >> $GITHUB_OUTPUT
+          echo "pr_title=$PR_TITLE" >> $GITHUB_OUTPUT
+          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+          
+          echo "PR #$PR_NUMBER: $BRANCH -> $BASE"
+      
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.pr.outputs.branch }}
+          fetch-depth: 0
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install anthropic requests
+      
+      - name: Extract refinement task
+        id: task
+        run: |
+          COMMENT="${{ github.event.comment.body }}"
+          
+          # Remove /refine or /fix prefix
+          TASK=$(echo "$COMMENT" | sed 's|^/refine ||' | sed 's|^/fix ||')
+          
+          # If no specific task, use generic
+          if [ -z "$TASK" ] || [ "$TASK" == "$COMMENT" ]; then
+            TASK="Fix compilation errors, resolve unresolved references, add missing imports, and ensure the code compiles successfully"
+          fi
+          
+          echo "task=$TASK" >> $GITHUB_OUTPUT
+          echo "Refinement task: $TASK"
+      
+      - name: Create refinement prompt
+        id: prompt
+        run: |
+          cat > refinement_task.txt << 'EOF'
+          CONTEXT: This is a refinement of an existing PR.
+          
+          PR Title: ${{ steps.pr.outputs.pr_title }}
+          Branch: ${{ steps.pr.outputs.branch }}
+          
+          TASK: ${{ steps.task.outputs.task }}
+          
+          INSTRUCTIONS:
+          1. Review ALL existing code in the project
+          2. Fix any compilation errors
+          3. Resolve unresolved references
+          4. Add missing imports
+          5. Ensure the code follows existing patterns
+          6. Keep changes minimal - only fix what's broken
+          7. Preserve the original functionality
+          
+          Generate ONLY the fixes needed, not the entire codebase.
+          EOF
+          
+          FULL_TASK=$(cat refinement_task.txt)
+          echo "Full task prepared"
+      
+      - name: Run AI refinement
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python3 .github/scripts/ai_pr_generator.py "${{ steps.task.outputs.task }}"
+      
+      - name: Commit refinements
+        run: |
+          git config user.name "AI Refinement Bot"
+          git config user.email "ai-refine@moneyflow.app"
+          
+          git add -A
+          
+          if git diff --staged --quiet; then
+            echo "No refinements needed"
+            echo "has_changes=false" >> $GITHUB_ENV
+          else
+            echo "AI Refinement: ${{ steps.task.outputs.task }}" > commit_msg.txt
+            echo "" >> commit_msg.txt
+            echo "Triggered by: @${{ github.event.comment.user.login }}" >> commit_msg.txt
+            
+            git commit -F commit_msg.txt
+            echo "has_changes=true" >> $GITHUB_ENV
+            
+            rm commit_msg.txt
+          fi
+      
+      - name: Push refinements
+        if: env.has_changes == 'true'
+        run: |
+          git push origin ${{ steps.pr.outputs.branch }}
+      
+      - name: Comment on PR with success
+        if: env.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "✅ **AI Refinement Complete**" > success_comment.md
+          echo "" >> success_comment.md
+          echo "I've analyzed the entire codebase and made the following refinements:" >> success_comment.md
+          echo "" >> success_comment.md
+          echo "**Task:** ${{ steps.task.outputs.task }}" >> success_comment.md
+          echo "" >> success_comment.md
+          echo "**Changes:**" >> success_comment.md
+          
+          # Get commit diff summary
+          git log -1 --stat >> success_comment.md
+          
+          echo "" >> success_comment.md
+          echo "Please review the changes and ensure everything looks good!" >> success_comment.md
+          echo "" >> success_comment.md
+          echo "---" >> success_comment.md
+          echo "🤖 Triggered by @${{ github.event.comment.user.login }}" >> success_comment.md
+          
+          gh pr comment ${{ steps.pr.outputs.pr_number }} --body-file success_comment.md
+          
+          rm success_comment.md
+      
+      - name: Comment on PR with no changes
+        if: env.has_changes == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "✅ **AI Review Complete**" > no_changes_comment.md
+          echo "" >> no_changes_comment.md
+          echo "I've analyzed the codebase and found no issues to fix!" >> no_changes_comment.md
+          echo "" >> no_changes_comment.md
+          echo "**Task:** ${{ steps.task.outputs.task }}" >> no_changes_comment.md
+          echo "" >> no_changes_comment.md
+          echo "The code appears to be correct as-is. 🎉" >> no_changes_comment.md
+          
+          gh pr comment ${{ steps.pr.outputs.pr_number }} --body-file no_changes_comment.md
+          
+          rm no_changes_comment.md
+      
+      - name: React with success
+        if: env.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            /repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions \
+            -f content='rocket'
+      
+      - name: React with check if no changes
+        if: env.has_changes == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            /repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions \
+            -f content='hooray'
+      
+      - name: Handle errors
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "❌ **AI Refinement Failed**" > error_comment.md
+          echo "" >> error_comment.md
+          echo "Something went wrong while trying to refine this PR." >> error_comment.md
+          echo "" >> error_comment.md
+          echo "Please check the [workflow logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details." >> error_comment.md
+          
+          gh pr comment ${{ steps.pr.outputs.pr_number }} --body-file error_comment.md || true
+          
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            /repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions \
+            -f content='confused' || true
