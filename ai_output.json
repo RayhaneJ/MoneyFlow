@@ -1,0 +1,9 @@
+{
+  "task": "Add a simple feature",
+  "files_created": ["app/src/main/java/com/moneyflow/tracker/test/TestFile.kt"],
+  "files_modified": [],
+  "pr_title": "Test: Add a simple feature",
+  "pr_description": "This is a TEST PR generated without calling the AI API.\n\n- No tokens consumed\n- No API costs\n- Just testing the workflow",
+  "breaking_changes": false,
+  "requires_migration": false
+}
