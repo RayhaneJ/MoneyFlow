@@ -1,0 +1,149 @@
+name: Test AI Workflow (No API calls)
+
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: 'Test task description'
+        required: true
+        default: 'Add a simple feature'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  test-without-api:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Test - Create mock AI response
+        run: |
+          echo "🧪 Creating MOCK AI response (no API call)"
+          
+          # Create fake AI output without calling API
+          cat > ai_output.json << 'EOF'
+          {
+            "task": "${{ inputs.task }}",
+            "files_created": ["app/src/main/java/com/moneyflow/tracker/test/TestFile.kt"],
+            "files_modified": [],
+            "pr_title": "Test: ${{ inputs.task }}",
+            "pr_description": "This is a TEST PR generated without calling the AI API.\n\n- No tokens consumed\n- No API costs\n- Just testing the workflow",
+            "breaking_changes": false,
+            "requires_migration": false
+          }
+          EOF
+          
+          echo "✅ Mock response created"
+          cat ai_output.json
+      
+      - name: Test - Create mock code file
+        run: |
+          echo "🧪 Creating MOCK Kotlin file"
+          
+          mkdir -p app/src/main/java/com/moneyflow/tracker/test
+          
+          cat > app/src/main/java/com/moneyflow/tracker/test/TestFile.kt << 'EOF'
+          package com.moneyflow.tracker.test
+          
+          /**
+           * This is a TEST file created by the workflow test
+           * No AI was called, no tokens consumed
+           */
+          class TestFile {
+              fun testFunction(): String {
+                  return "This is a test from workflow: ${{ inputs.task }}"
+              }
+          }
+          EOF
+          
+          echo "✅ Mock file created"
+          cat app/src/main/java/com/moneyflow/tracker/test/TestFile.kt
+      
+      - name: Test - Create branch
+        run: |
+          BRANCH="test/$(date +%s)-workflow-test"
+          echo "branch=$BRANCH" >> $GITHUB_ENV
+          
+          git config user.name "Test Bot"
+          git config user.email "test@moneyflow.app"
+          git checkout -b "$BRANCH"
+          
+          echo "✅ Branch created: $BRANCH"
+      
+      - name: Test - Commit changes
+        run: |
+          git add -A
+          
+          if git diff --staged --quiet; then
+            echo "❌ No changes to commit"
+            echo "changes=false" >> $GITHUB_ENV
+          else
+            git commit -m "🧪 Test: ${{ inputs.task }}"
+            echo "changes=true" >> $GITHUB_ENV
+            echo "✅ Changes committed"
+          fi
+      
+      - name: Test - Create PR body file
+        if: env.changes == 'true'
+        run: |
+          echo "🧪 Creating PR body file"
+          
+          PR_TITLE=$(python3 -c "import json; print(json.load(open('ai_output.json'))['pr_title'])")
+          PR_DESC=$(python3 -c "import json; print(json.load(open('ai_output.json'))['pr_description'])")
+          
+          echo "## Test PR (No API Called)" > pr_body.md
+          echo "" >> pr_body.md
+          echo "$PR_DESC" >> pr_body.md
+          echo "" >> pr_body.md
+          echo "---" >> pr_body.md
+          echo "" >> pr_body.md
+          echo "**Task:** ${{ inputs.task }}" >> pr_body.md
+          echo "**This is a TEST:** No AI API was called" >> pr_body.md
+          echo "**No tokens consumed:** ✅" >> pr_body.md
+          echo "**Branch:** \`${{ env.branch }}\`" >> pr_body.md
+          
+          echo "✅ PR body created:"
+          cat pr_body.md
+      
+      - name: Test - Push and create PR
+        if: env.changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🧪 Pushing branch and creating PR"
+          
+          git push origin ${{ env.branch }}
+          
+          PR_TITLE=$(python3 -c "import json; print(json.load(open('ai_output.json'))['pr_title'])")
+          
+          gh pr create \
+            --title "🧪 TEST: $PR_TITLE" \
+            --body-file pr_body.md \
+            --base main \
+            --head ${{ env.branch }} \
+            --label "test,workflow-test"
+          
+          echo "✅ TEST PR created successfully!"
+      
+      - name: Summary
+        run: |
+          echo "🎉 Workflow test completed!"
+          echo ""
+          echo "✅ All steps executed successfully"
+          echo "✅ No API tokens consumed"
+          echo "✅ No costs incurred"
+          echo "✅ Workflow syntax is valid"
+          echo ""
+          if [ "${{ env.changes }}" == "true" ]; then
+            echo "✅ Test PR created - check the Pull Requests tab"
+            echo "   You can merge or close it safely"
+          fi
