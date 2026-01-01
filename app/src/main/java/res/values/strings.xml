@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MoneyFlow</string>
+    
+    <!-- Common -->
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="ok">OK</string>
+    
+    <!-- Flow Types -->
+    <string name="inflow">Inflow</string>
+    <string name="outflow">Outflow</string>
+    
+    <!-- Add Expense Activity -->
+    <string name="add_expense">Add Expense</string>
+    <string name="income_amount">Income Amount</string>
+    <string name="expense_amount">Expense Amount</string>
+    <string name="income_description">Income Description</string>
+    <string name="expense_description">Expense Description</string>
+    <string name="category">Category</string>
+    <string name="select_date">Select Date</string>
+    <string name="select_wallet">Select Wallet</string>
+    
+    <!-- Default Values -->
+    <string name="default_category">General</string>
+    
+    <!-- Error Messages -->
+    <string name="error_amount_required">Amount is required</string>
+    <string name="error_description_required">Description is required</string>
+    <string name="error_select_wallet">Please select a wallet</string>
+    <string name="error_invalid_amount">Please enter a valid amount</string>
+    <string name="error_amount_positive">Amount must be greater than zero</string>
+    <string name="error_saving_expense">Error saving expense</string>
+    
+    <!-- Success Messages -->
+    <string name="expense_saved_successfully">Expense saved successfully</string>
+    
+    <!-- Wallet -->
+    <string name="create_wallet">Create Wallet</string>
+    <string name="wallet_name">Wallet Name</string>
+    <string name="wallet_limit">Spending Limit (Optional)</string>
+    <string name="initial_balance">Initial Balance</string>
+    
+    <!-- Dashboard -->
+    <string name="dashboard">Dashboard</string>
+    <string name="total_balance">Total Balance</string>
+    <string name="monthly_expenses">Monthly Expenses</string>
+    <string name="recent_transactions">Recent Transactions</string>
+    
+    <!-- Reports -->
+    <string name="reports">Reports</string>
+    <string name="monthly_overview">Monthly Overview</string>
+    <string name="expense_by_category">Expenses by Category</string>
+</resources>
